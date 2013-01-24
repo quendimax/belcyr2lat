@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import argparse
 import sys
 
 
@@ -128,13 +129,27 @@ def translate(line):
     return result
 
 
-# main
-if len(sys.argv) == 1:
-    print("Usage: ", sys.argv[0], " <files>")
-    exit()
+def parseArguments():
+    parser = argparse.ArgumentParser(description='Conventer of belarusian text from cyrillic to latin alphabet')
+    parser.add_argument('input', metavar='FILENAME', nargs='?', default='-', help='input file name. If missing then reads from stdin')
+    parser.add_argument('-o', '--output', default='-', metavar='FILENAME', help='output file name. If it don\'t enumerate then writes to stdout')
+    args = parser.parse_args()
+    if args.input == '-':
+        args.input = sys.stdin
+    else:
+        args.input = open(args.input, 'r', encoding='utf8')
+    if args.output == '-':
+        args.output = sys.stdout
+    else:
+        args.output = open(args.output, 'w', encoding='utf8')
+    return args
 
-for file_name in sys.argv[1:]:
-    out_file_name = file_name + "_lacinka"
-    f = open(out_file_name, 'w', encoding='utf8')
-    for line in open(file_name, encoding='utf8'):
-        f.write(translate(line))
+
+def main():
+    args = parseArguments()
+    for line in args.input:
+        args.output.write(translate(line))
+
+
+if __name__ == '__main__':
+    main()
