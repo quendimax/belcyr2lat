@@ -133,15 +133,17 @@ def parseArguments():
     parser = argparse.ArgumentParser(description='Conventer of belarusian text from cyrillic to latin alphabet')
     parser.add_argument('input', metavar='FILENAME', nargs='?', default='-', help='input file name. If missing then reads from stdin')
     parser.add_argument('-o', '--output', default='-', metavar='FILENAME', help='output file name. If it don\'t enumerate then writes to stdout')
+    parser.add_argument('--input-encoding', dest='incodec', default='utf8', metavar='CODEC', help='choose a codec for input stream (default utf8)')
+    parser.add_argument('--output-encoding', dest='outcodec', default='utf8', metavar='CODEC', help='choose a codec for output stream (default utf8)')
     args = parser.parse_args()
     if args.input == '-':
         args.input = sys.stdin
     else:
-        args.input = open(args.input, 'r', encoding='utf8')
+        args.input = open(args.input, 'r', encoding=args.incodec)
     if args.output == '-':
         args.output = sys.stdout
     else:
-        args.output = open(args.output, 'w', encoding='utf8')
+        args.output = open(args.output, 'w', encoding=args.outcodec)
     return args
 
 
